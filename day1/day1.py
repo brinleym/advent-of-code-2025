@@ -156,7 +156,7 @@ def main():
     safe.reset()
     part2_result = crack_safe_part2(safe, rotations)
     print("Part 1 Result: %d" % part1_result)
-    print("Part 2 Result V2: %d" % part2_result)
+    print("Part 2 Result: %d" % part2_result)
 
 
 main()
