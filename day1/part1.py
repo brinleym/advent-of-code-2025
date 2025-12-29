@@ -1,3 +1,8 @@
+"""
+Solution to Part 1 of Day 1
+https://adventofcode.com/2025/day/1#part1
+"""
+
 # data.txt contains a newline-separated list of rotations.
 # 
 # Each rotation starts with "L" or "R" to indicate the
