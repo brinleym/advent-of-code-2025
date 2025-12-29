@@ -2,6 +2,11 @@
 Solution to Day 2
 """
 
+class Range:
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
 class Ranges:
     FILENAME = "data.txt"
 
@@ -22,11 +27,6 @@ class Ranges:
                 result.append(Range(start, end))
         
         return result
-
-class Range:
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
     
 def find_invalid_ids_sum_part1(ranges):
     invalid_sum = 0
