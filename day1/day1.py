@@ -1,6 +1,6 @@
 """
-Solution to Part 1 of Day 1
-https://adventofcode.com/2025/day/1#part1
+Solution to Day 1
+https://adventofcode.com/2025/day/1
 """
 
 class Solution:
@@ -55,12 +55,7 @@ class Solution:
             if direction == "R": # turn towards higher numbers
                 curr_position = (curr_position + distance) % self.DIAL_SIZE
             else: # direction == "L", # turn towards lower numbers
-                if curr_position - distance >= 0:
-                    curr_position = curr_position - distance
-                else:
-                    curr_position = self.DIAL_SIZE - (abs(curr_position - distance) % self.DIAL_SIZE)
-                    if curr_position == self.DIAL_SIZE:
-                        curr_position = 0
+                curr_position = (curr_position - distance) % self.DIAL_SIZE
 
             if curr_position == 0:
                 zeroes += 1
@@ -126,7 +121,6 @@ class Solution:
     
 def main():
     solution = Solution("data.txt")
-    solution.read_data()
     part1_result = solution.find_password()
     part2_result = solution.find_password_include_zero_passthroughs()
     print("Part 1 Result: %d" % part1_result)
