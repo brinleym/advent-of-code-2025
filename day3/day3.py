@@ -65,13 +65,13 @@ def main():
     max_voltage_sum = 0
     for bank in banks:
         max_voltage_sum += bank.max_voltage_two_batteries()
-    print("Part 1 Answer: %d" % max_voltage_sum)
+    print("Part 1 Result: %d" % max_voltage_sum)
 
     # Part 2
     max_voltage_sum = 0
     for bank in banks:
         max_voltage_sum += bank.max_voltage_twelve_batteries()
-    print("Part 2 Answer: %d" % max_voltage_sum)
+    print("Part 2 Result: %d" % max_voltage_sum)
 
 main()
 
