@@ -6,7 +6,7 @@ class Bank:
     def __init__(self, line):
         self.bank = [int(num) for num in line]
 
-    def max_voltage(self):
+    def max_voltage_two_batteries(self):
         if len(self.bank) < 2:
             raise Exception("Invalid input")
         
@@ -26,7 +26,7 @@ class Bank:
 
         return (max_tens_digit * 10) + max_ones_digit
     
-    def max_voltage_part2(self):
+    def max_voltage_twelve_batteries(self):
         if len(self.bank) < 12:
             raise Exception("Invalid input")
         
@@ -64,13 +64,13 @@ def main():
     # Part 1
     max_voltage_sum = 0
     for bank in banks:
-        max_voltage_sum += bank.max_voltage()
+        max_voltage_sum += bank.max_voltage_two_batteries()
     print("Part 1 Answer: %d" % max_voltage_sum)
 
     # Part 2
     max_voltage_sum = 0
     for bank in banks:
-        max_voltage_sum += bank.max_voltage_part2()
+        max_voltage_sum += bank.max_voltage_twelve_batteries()
     print("Part 2 Answer: %d" % max_voltage_sum)
 
 main()
