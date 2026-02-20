@@ -1,3 +1,5 @@
+from utils.printing import print_solution
+
 def out_of_bounds(row, col, grid):
     return row < 0 or col < 0 or row >= len(grid) or col >= len(grid[0])
 
@@ -32,7 +34,7 @@ def main():
             line = line.strip()
             grid.append(list(line))
 
-    print(f"Solution to Part 1: {count_rolls_of_accessible_paper(grid)}")
+    print_solution(count_rolls_of_accessible_paper(grid))
 
 if __name__ == "__main__":
     main()
