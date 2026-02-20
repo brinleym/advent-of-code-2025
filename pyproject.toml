@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "advent_of_code_2025"
+version = "0.1.0"
+
+[tool.setuptools.packages.find]
+include = ["utils*"]  # This explicitly only installs your utils
