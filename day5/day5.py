@@ -20,12 +20,20 @@ def count_fresh_ingredients(ingredients: List[int], fresh_ranges: List[Tuple[int
 
     return count
 
+
+def count_possible_fresh_ingredients(fresh_ranges: List[Tuple[int]]) -> int:
+    count = 0
+    for r in fresh_ranges:
+        count += (r[1] - r[0] + 1)
+
+    return count
+
 def merge_overlapping_ranges(ranges: List[Tuple[int]]) -> List[Tuple[int]]:
     if len(ranges) == 0:
         return []
     
     ranges.sort()
-    
+
     merged_ranges = [ranges[0]]
     for i in range(1, len(ranges)):
         if is_overlapping(merged_ranges[-1], ranges[i]):
@@ -57,6 +65,7 @@ def main() -> None:
 
     fresh_ranges = merge_overlapping_ranges(fresh_ranges)
     print_solution(count_fresh_ingredients(ingredients, fresh_ranges))
+    print_solution(count_possible_fresh_ingredients(fresh_ranges), part=2)
 
 if __name__ == "__main__":
     main()
