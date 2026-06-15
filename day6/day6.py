@@ -1,5 +1,7 @@
+from collections import defaultdict
 from enum import StrEnum
 import math
+from typing import List
 from utils.printing import print_solution
 
 FILENAME = "day6.txt"
@@ -8,48 +10,41 @@ class Operation(StrEnum):
     ADD = "+"
     MULTIPLY = "*"
 
-class Column:
-    def __init__(self):
-        self.values = []
-        self.op = None
-
-    def add_value(self, value: int) -> None:
-        self.values.append(value)
-
-    def set_op(self, op: str) -> None:
-        self.op = op
-
-    def evaluate(self) -> int:
-        match self.op:
-            case Operation.ADD:
-                return sum(self.values)
-            case Operation.MULTIPLY:
-                return math.prod(self.values)
-            case _:
-                raise Exception(f"Unsupported operation: {self.op}")
-
+def evaluate(numbers: List[int], op: Operation) -> int:
+    match op:
+        case Operation.ADD:
+            return sum(numbers)
+        case Operation.MULTIPLY:
+            return math.prod(numbers)
+        case _:
+            raise Exception(f"Unsupported operation: {op}")
 
 def main():
-    cols = {} # maps col indices to Columns
-
     with open(FILENAME, 'r') as file:
+        expressions = defaultdict(lambda: {"numbers": {}, "op": None})
+
         for line in file:
-            line = line.strip()
-            elems = line.split()
-            for i, elem in enumerate(elems):
-                if not i in cols:
-                    cols[i] = Column()
+            expr_idx = 0
+            
+            for col_idx, ch in enumerate(line.rstrip("\n")):
+                expr = expressions[expr_idx]
+
+                if ch == " ":
+                    if not (col_idx == 0 or line[col_idx - 1] == " "):
+                        expr_idx += 1
+
+                elif ch.isdigit():
+                    numbers = expr["numbers"]
+                    numbers[col_idx] = numbers.get(col_idx, 0) * 10 + int(ch)
                 
-                if elem.isdigit():
-                    cols[i].add_value(int(elem))
                 else:
-                    cols[i].set_op(elem)
+                    expr["op"] = Operation(ch)
 
-    res = 0
-    for col in cols.values():
-        res += col.evaluate()
+        total = sum(
+            evaluate(expr["numbers"].values(), expr["op"]) for expr in expressions.values()
+        )
 
-    print_solution(res)
+        print_solution(total, part=2)
 
 if __name__ == "__main__":
     main()
