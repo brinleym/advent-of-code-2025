@@ -45,7 +45,7 @@ class Manifold:
             return [(r + 1, c)]
 
         if cell == self.SPLITTER:
-            return [(r + 1, c - 1), (r + 1, c + 1)]
+            return [(r, c - 1), (r, c + 1)]
 
         raise ValueError(f"Unknown cell type: {cell}")
 
@@ -92,13 +92,31 @@ def part2(manifold: Manifold) -> int:
 
     return count_paths(*manifold.start)
 
+def part2_iterative(manifold: Manifold) -> int:
+    dp = [[0] * manifold.width for _ in range(manifold.height)]
+    start_row, start_col = manifold.start
+    dp[start_row][start_col] = 1
+    
+    for r in range(1, manifold.height):
+        for c in range(manifold.width):
+            if not manifold.out_of_bounds(r - 1, c - 1) and manifold.get(r - 1, c - 1) == manifold.SPLITTER:
+                dp[r][c] += dp[r - 1][c - 1]
+
+            if not manifold.out_of_bounds(r - 1, c + 1) and manifold.get(r - 1, c + 1) == manifold.SPLITTER:
+                dp[r][c] += dp[r - 1][c + 1]
+
+            if not manifold.out_of_bounds(r - 1, c) and manifold.get(r - 1, c) != manifold.SPLITTER:
+                dp[r][c] += dp[r - 1][c]
+
+    return sum(dp[manifold.height - 1])
+
 
 def main() -> None:
     manifold = Manifold(FILENAME)
 
     print_solution(part1(manifold))
     print_solution(part2(manifold), part=2)
-
+    print_solution(part2_iterative(manifold), part=2)
 
 if __name__ == "__main__":
     main()
