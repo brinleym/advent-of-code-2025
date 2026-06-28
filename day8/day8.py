@@ -19,13 +19,15 @@ class JunctionBox:
 
 class Circuits:
     def __init__(self):
-        self.parent = {} # locs to parents
+        self.parent = {} # junction boxes to parents
         self.rank = {} # circuit root to rank
+        self.count = 0 # number of disjoint circuits
 
     def create(self, loc: JunctionBox) -> None:
         if not loc in self.parent:
             self.parent[loc] = loc
             self.rank[loc] = 0
+            self.count += 1
         
     def find(self, loc: JunctionBox) -> JunctionBox:
         if self.parent[loc] != loc:
@@ -47,6 +49,8 @@ class Circuits:
         else:
             self.parent[root2] = root1
             self.rank[root1] += 1
+
+        self.count -= 1
 
     def top3(self) -> tuple[int, int, int]: 
         sizes = defaultdict(int) # root to circuit size
@@ -82,33 +86,46 @@ class Circuits:
         for root, locs in roots.items():
             print(f"{root}: {locs}")
 
-def part1():
-    locs: list[JunctionBox] = []
-    circuts: Circuits = Circuits()
-    min_heap: list[tuple[int, JunctionBox, JunctionBox]] = []
+def part1(heap: list[tuple[int, JunctionBox, JunctionBox]], circuits: Circuits) -> int:
+    for _ in range(TOP_N):
+        _, loc1, loc2 = heapq.heappop(heap)
+        circuits.union(loc1, loc2)
+
+    first, second, third = circuits.top3()
+    return first * second * third
+
+def part2(heap: list[tuple[int, JunctionBox, JunctionBox]], circuits: Circuits) -> int:
+    res = 0
+    while heap:
+        _, jb1, jb2 = heapq.heappop(heap)
+        circuits.union(jb1, jb2)
+        if circuits.count == 1:
+            res = jb1.x * jb2.x
+            break
+
+    return res
+
+def main():
+    boxes: list[JunctionBox] = []
+    circuits = Circuits()
+    heap = []
 
     with open(FILENAME, "r") as file:
         for line in file:
             line = line.rstrip("\n")
             coords = line.split(",")
-            loc = JunctionBox(int(coords[0]), int(coords[1]), int(coords[2]))
-            locs.append(loc)
-            circuts.create(loc)
+            
+            jb = JunctionBox(int(coords[0]), int(coords[1]), int(coords[2]))
+            boxes.append(jb)
+            circuits.create(jb)
 
-    for i in range(len(locs)):
-        for j in range(i + 1, len(locs)):
-            dist = locs[i].distance(locs[j])
-            heapq.heappush(min_heap, (dist, locs[i], locs[j]))
-
-    for i in range(TOP_N):
-        _, loc1, loc2 = heapq.heappop(min_heap)
-        circuts.union(loc1, loc2)
-
-    first, second, third = circuts.top3()
-    return first * second * third
-
-def main():
-    print_solution(part1())
+    for i in range(len(boxes)):
+        for j in range(i + 1, len(boxes)):
+            dist = boxes[i].distance(boxes[j])
+            heapq.heappush(heap, (dist, boxes[i], boxes[j]))
+    
+    print_solution(part1(heap, circuits))
+    print_solution(part2(heap, circuits), part=2)
 
 if __name__ == "__main__":
     main()
